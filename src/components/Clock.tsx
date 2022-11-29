@@ -17,7 +17,7 @@ const Clock = (props:ClockProps) => {
     day: 'numeric' as const
   };
   const defaultTimeOptions = {
-    second: second ? 'numeric' : undefined,
+    second: second ? 'numeric' as const : undefined,
     hour: 'numeric' as const,
     minute: 'numeric' as const,
     hour12: hour12

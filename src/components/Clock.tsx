@@ -1,36 +1,21 @@
-import {CSSProperties, useEffect, useState} from "react";
+import { useEffect, useState } from "react";
+import { ClockProps } from "./Clock.type";
 
-interface ClockProps{
-  twoLines?: boolean | undefined;
-  timeFirst?: boolean | undefined;
-  trim? : 'date' | 'time' | undefined
-
-  color?: CSSProperties['color'];
-  fontFamily?: CSSProperties['fontFamily']; //Google Font Type
-  fontSize?: CSSProperties['fontSize'];
-  fontWeight?: CSSProperties['fontWeight'];
-  textAlign?: CSSProperties['textAlign']
-
-  hour12?: boolean | undefined;
-  dateFormat?: 'long' | 'numeric' | 'short';
-  weekday?: 'long' | 'short' | 'narrow' | undefined;
-  second?: 'numeric' | '2-digit' | undefined;
-}
-
-const Clock = (props:ClockProps) => {
+const Clock = (props: ClockProps) => {
   const {
     twoLines,
     timeFirst,
     trim,
     hour12 = true,
-    dateFormat = 'long' as const,
+    dateFormat = "long" as const,
     weekday = undefined,
-    second = 'numeric',
-    color = 'white',
-    fontSize = '1rem',
-    textAlign = 'center',
-    fontWeight = '400',
-    fontFamily = 'sans-serif'} = props;
+    second = "numeric",
+    color = "white",
+    fontSize = "1rem",
+    textAlign = "center",
+    fontWeight = "400",
+    fontFamily = "sans-serif",
+  } = props;
 
   const [date, setDate] = useState(new Date());
   const containerStyles = {
@@ -39,23 +24,28 @@ const Clock = (props:ClockProps) => {
     fontFamily: fontFamily,
     fontSize: fontSize,
     fontWeight: fontWeight,
-  }
+  };
 
   const defaultDateOptions = {
     weekday: weekday,
-    year: 'numeric' as const,
+    year: "numeric" as const,
     month: dateFormat,
-    day: 'numeric' as const
+    day: "numeric" as const,
   };
   const defaultTimeOptions = {
     second: second,
-    hour: 'numeric' as const,
-    minute: 'numeric' as const,
-    hour12: hour12
+    hour: "numeric" as const,
+    minute: "numeric" as const,
+    hour12: hour12,
   };
 
-  const dateString = new Intl.DateTimeFormat('en-US', defaultDateOptions).format(date)
-  const time = new Intl.DateTimeFormat('en-US',defaultTimeOptions).format(date)
+  const dateString = new Intl.DateTimeFormat(
+    "en-US",
+    defaultDateOptions
+  ).format(date);
+  const time = new Intl.DateTimeFormat("en-US", defaultTimeOptions).format(
+    date
+  );
 
   const refreshClock = () => {
     setDate(new Date());
@@ -69,30 +59,38 @@ const Clock = (props:ClockProps) => {
   }, []);
 
   return (
-      <>
-        <p id="clock" style={containerStyles}>
-          {
-            timeFirst ?
+    <>
+      <p id="clock" style={containerStyles}>
+        {timeFirst ? (
+          <>
+            <span>
+              {trim !== "time" ? (
                 <>
-                  {trim !== 'time' ? <span>{time}{trim === undefined ? <>&nbsp;</> : null}</span> : null}
-                  {
-                    twoLines && trim === undefined ? <br/> : null
-                  }
-                  {trim !== 'date' ? <span>{dateString}</span> : null}
+                  {time}
+                  {trim === undefined ? <>&nbsp;</> : null}
                 </>
-                :
+              ) : null}
+            </span>
+            {twoLines && trim === undefined ? <br /> : null}
+            <span>{trim !== "date" ? dateString : null}</span>
+          </>
+        ) : (
+          <>
+            <span>
+              {trim !== "date" ? (
                 <>
-                  {trim !== 'date' ? <span>{dateString}{trim === undefined ? <>&nbsp;</> : null}</span> : null}
-                  {
-                    twoLines && trim === undefined ? <br/> : null
-                  }
-                  {trim !== 'time' ? <span>{time}</span> : null}
+                  {dateString}
+                  {trim === undefined ? <>&nbsp;</> : null}
                 </>
-          }
-        </p>
-      </>
-  )
-
+              ) : null}
+            </span>
+            {twoLines && trim === undefined ? <br /> : null}
+            <span>{trim !== "time" ? time : null}</span>
+          </>
+        )}
+      </p>
+    </>
+  );
 };
 
-export default Clock
+export default Clock;
